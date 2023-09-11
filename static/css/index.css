@@ -1,0 +1,57 @@
+body {
+    background-color: #ffffff;
+    color: #333333;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    margin-top: 50px;
+}
+.form-control {
+    background-color: #e5e5e5;
+    border: none;
+    border-radius: 0;
+    color: #333333;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+.form-control:focus {
+    background-color: #ffffff;
+    border: none;
+    box-shadow: none;
+    color: #333333;
+}
+.form-check-label {
+    color: #4c4c4c;
+    font-size: 14px;
+    margin-left: 5px;
+}
+.btn-primary {
+    background-color: #333333;
+    border: none;
+    border-radius: 0;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+.btn-primary:hover {
+    background-color: #4c4c4c;
+}
+.forgot-password {
+    color: #4c4c4c;
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: center;
+}
+.forgot-password a {
+    color: #8c8c8c;
+    text-decoration: none;
+}
+.forgot-password a:hover {
+    color: #333333;
+}
