@@ -1,5 +1,5 @@
-## JoyStick Junction
-# Class project, under development
+# JoyStick Junction
+## Class project, under development
 
 1. Install dependencies:
    ```
