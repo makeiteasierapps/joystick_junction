@@ -11,6 +11,7 @@ body {
 .hero {
   background-image: url("../images/vecteezy_glossy-gaming-overlay-and-screen-border-decoration-elements_20919342.jpg");
   background-size: cover;
+  height: 100vh;
   color: #fff;
   padding: 150px 0;
 }
