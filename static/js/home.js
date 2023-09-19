@@ -29,8 +29,14 @@ window.onload = function () {
 
 document.addEventListener("DOMContentLoaded", () => {
   const cells = document.querySelectorAll(".cell");
+  const status = document.getElementById("status");
   const resetButton = document.querySelector('.reset-button');
   let currentPlayer = 'X';
+
+  //Function to display the status of whose turn it is.
+  function updateStatus() {
+    status.textContent = `Player ${currentPlayer}'s turn`;
+  }
 
   //Game reset-function
   function handleResetClick() {
@@ -39,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       cell.textContent = '';
       cell.classList.remove('X', 'O');
     });
+    updateStatus(); // Update the status after resetting the game
   }
 
   resetButton.addEventListener('click', handleResetClick);
@@ -67,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // If not a win and not a tie, switch to the other player.
         else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
+          updateStatus(); // Update the status after switching player
         }
       }
     });
@@ -106,6 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if every cell is filled (none are empty).
     return [...cells].every((cell) => cell.textContent !== "");
   }
+
+  updateStatus();
+  
 });
 
 
