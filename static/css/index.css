@@ -55,3 +55,17 @@ body {
 .forgot-password a:hover {
     color: #333333;
 }
+
+#toast-container {
+    margin-top: 20px;
+}
+
+.toast-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+button.close {
+    border: none;
+    outline: none;
+}
