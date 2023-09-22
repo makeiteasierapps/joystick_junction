@@ -3,7 +3,7 @@ from firebase_admin import credentials, firestore
 
 from flask import Flask
 from myapp.views import register_blueprints
-from myapp.services.firebase_services import FirebaseService
+from myapp.services.firebase_service import FirebaseService
 
 def create_app():
     app = Flask(__name__, template_folder='templates', static_folder='../static')
