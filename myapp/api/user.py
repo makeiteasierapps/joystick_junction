@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, request
-from myapp.services.user_services import UserService as us
+from myapp.services.user_service import UserService as us
 
 user = Blueprint('user', __name__)
 

@@ -4,8 +4,7 @@ class UserService:
     @staticmethod
     def get_user_data(uid):
         db = current_app.config['db']
-        doc_ref = db.collection('users').document(uid)
-        doc = doc_ref.get()
+        doc = db.collection('users').document(uid).get()
         if doc.exists:
             return jsonify(doc.to_dict()), 200
         
