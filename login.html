@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JoyStick Junction</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="import" href="home.html">
 </head>
 <body>
     <div class="container">
@@ -16,20 +17,20 @@
                     <h1 class="text-center mb-4">Login</h1>
                     <div class="form-row">
                         <div class="col-md mb-3">
-                        <label for="login-email">Email</label>
-                        <input type="email" class="form-control" id="login-email" required>
-                        <div class="invalid-feedback">
-                            Please provide a valid email.
+                            <label for="login-form-email">Email</label>
+                            <input type="email" class="form-control" id="login-form-email" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid email.
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md mb-3"></div>
-                        <label for="login-password">Password</label>
-                        <input type="password" class="form-control" id="login-password" required>
-                        <div class="invalid-feedback">
-                            Please provide a password.
-                        </div>
+                        <div class="col-md mb-3">
+                            <label for="login-form-password">Password</label>
+                            <input type="password" class="form-control" id="login-form-password" required>
+                            <div class="invalid-feedback">
+                                Please provide a password.
+                            </div>
                         </div>
                     </div>
                     <div class="container d-flex justify-content-center align-items-center">
@@ -48,12 +49,12 @@
                         <input type="text" class="form-control" id="signup-username" required>
                     </div>
                     <div class="form-row">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" required="" autocomplete="additional-name">
+                        <label for="create-account-form-email">Email</label>
+                        <input type="email" class="form-control" id="create-account-form-email" required="" autocomplete="additional-name">
                     </div>
                     <div class="form-row">
-                        <label for="signup-password">Password</label>
-                        <input type="password" class="form-control" id="signup-password" required>
+                        <label for="create-account-form-password">Password</label>
+                        <input type="password" class="form-control" id="create-account-form-password" required>
                     </div>
                     <div class="form-row">
                         <label for="confirm-password">Confirm Password</label>
@@ -90,29 +91,8 @@
           </div>
         </div>
     </div>
-
-    <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
-        (function() {
-          'use strict';
-          window.addEventListener('load', function() {
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
-            var forms = document.getElementsByClassName('needs-validation');
-            // Loop over them and prevent submission
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', function(event) {
-                if (form.checkValidity() === false) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-              }, false);
-            });
-          }, false);
-        })();
-        </script>
+    <script type="module" src="/js/login.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script type="module" src="{{ url_for('static', filename='js/login.js') }}"></script>
     <script src="https://kit.fontawesome.com/9fb4e03001.js" crossorigin="anonymous"></script>
 </body>
 </html>

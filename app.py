@@ -1,17 +1,9 @@
-from flask import Flask, render_template
+from myapp import create_app
+from flask_cors import CORS
 
-app = Flask(__name__)
+app = create_app()
 
-
-@app.route('/')
-def index():
-    return render_template('login.html')
-
-
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
+CORS(app)
 
 if __name__ == '__main__':
     app.run(debug=True)
