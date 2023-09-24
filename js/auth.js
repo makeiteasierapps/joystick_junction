@@ -2,14 +2,13 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
-
+import { doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from './firebaseConfig.js';
+import loginPage from '../login.html';
 
 export default class AuthService {
     // This method is used to create a new user with the provided username, email, and password.
     static async createUser(username, email, password) {
-        
         // We use Firebase's createUserWithEmailAndPassword method to create a new user.
         const userCredential = await createUserWithEmailAndPassword(
             auth,
@@ -35,18 +34,23 @@ export default class AuthService {
             email,
             password
         );
-        // Log the successful login of the user.
-        console.log('User logged in:', userCredential.user);
         // Return the user's credentials.
         return userCredential;
     }
 
     // This method is used to log out the currently logged in user.
     static async logoutUser() {
-        // We use Firebase's signOut method to log out the user.
-        await auth.signOut();
-        // Log the successful logout of the user.
-        console.log('User logged out');
+        try {
+            const uid = auth.currentUser.uid;
+            // We use Firebase's signOut method to log out the user.
+            await auth.signOut();
+            const userRef = doc(db, 'users', uid);
+            // Update the 'online' field of the user document
+            await updateDoc(userRef, { online: false });
+            window.location.href = loginPage;
+        } catch (error) {
+            return error.message;
+        }
     }
 
     // This method is used to handle form submissions.
@@ -82,14 +86,12 @@ export default class AuthService {
 
             // We try to execute the action (either creating a new user or logging in an existing user).
             try {
-                const success =
+                const result =
                     form.id === 'create-account-form'
                         ? await action(username, email, password)
                         : await action(email, password);
-                // If the action is successful, we return true.
-                if (success) {
-                    return true;
-                }
+                // If the action is successful, we return an object with success status and result.
+                return { success: !!result, result };
             } catch (error) {
                 // If there's an error, we log it and show a toast with the error message.
                 console.log('Error logging in:', error.code, error);
@@ -102,13 +104,10 @@ export default class AuthService {
                 document.getElementById(resetFormId).reset();
                 return false;
             }
-
-            // If the action is not successful, we reset the form.
-            document.getElementById(form.id).reset();
         };
     }
 
-    // This method is used to parse Firebase authentication errors.
+    // This method is used to parse Firebase authentication errors into a more user friendly format.
     static parseAuthError(errorCode) {
         // We use a switch statement to return a user-friendly error message based on the error code.
         switch (errorCode) {

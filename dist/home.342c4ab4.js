@@ -574,45 +574,79 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"3qW8w":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _firebaseConfigJs = require("./firebaseConfig.js");
 var _firestore = require("firebase/firestore");
-console.log((0, _firebaseConfigJs.db).app);
-window.onload = function() {
-    // const users = collection(db, 'users');
-    // console.log(users);
-    // db.collection('users')
-    //     .where('online', '==', true)
-    //     .onSnapshot((querySnapshot) => {
-    //         let users = [];
-    //         querySnapshot.forEach((doc) => {
-    //             users.push(doc.data());
-    //         });
-    //         console.log('Current online users: ', users.join(', '));
-    //     });
-    (0, _firebaseConfigJs.auth).onAuthStateChanged(async function(user) {
-        if (user) {
-            // User is signed in.
-            const idToken = await user.getIdToken();
-            try {
-                const response = await fetch("http://localhost:5000/user", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: idToken
-                    }
-                });
-                const data = await response.json();
-                if (data) {
-                    const username = data.username;
-                    document.getElementById("user-greeting").textContent = `Hello, ${username}!`;
-                } else console.log("No such document!");
-            } catch (error) {
-                console.error("Error:", error);
-            }
-        } else // No user is signed in.
-        console.log("No user is signed in.");
+var _authJs = require("./auth.js");
+var _authJsDefault = parcelHelpers.interopDefault(_authJs);
+// This firebase method is triggered when the authentication state changes (i.e. when the user logs in or logs out).
+// it is always listening for changes in the authentication state.
+(0, _firebaseConfigJs.auth).onAuthStateChanged(async function(user) {
+    if (user) {
+        // User is signed in.
+        const idToken = await user.getIdToken();
+        try {
+            const response = await fetch("http://localhost:5000/user", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: idToken
+                }
+            });
+            const data = await response.json();
+            if (data) {
+                const username = data.username;
+                document.getElementById("user-greeting").textContent = `Hello, ${username}!`;
+                await getOnlineUsers();
+            } else console.log("No such document!");
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+});
+function getOnlineUsers() {
+    // We return a new Promise which will be resolved when the list of users is fetched.
+    return new Promise((resolve, reject)=>{
+        // We get a reference to the 'users' collection in the Firestore database.
+        const usersCol = (0, _firestore.collection)((0, _firebaseConfigJs.db), "users");
+        // We create a query to get all documents in the 'users' collection.
+        const q = (0, _firestore.query)(usersCol);
+        // We use the onSnapshot method to listen for real-time updates to the query.
+        (0, _firestore.onSnapshot)(q, (querySnapshot)=>{
+            let users = [];
+            // We iterate over each document in the query snapshot.
+            querySnapshot.forEach((doc)=>{
+                users.push(doc.data());
+            });
+            // We clear the previous list of users in the HTML.
+            document.getElementById("users-list").innerHTML = "";
+            // We iterate over each user in the users array.
+            users.forEach((user)=>{
+                let li = document.createElement("li");
+                li.textContent = user.username;
+                // If the user is online, we add a green dot next to their name.
+                if (user.online) {
+                    let span = document.createElement("span");
+                    span.style.backgroundColor = "green";
+                    span.style.borderRadius = "50%";
+                    span.style.display = "inline-block";
+                    span.style.width = "10px";
+                    span.style.height = "10px";
+                    span.style.marginLeft = "5px";
+                    // We append the green dot to the list item.
+                    li.appendChild(span);
+                }
+                // We append the list item to the 'users-list' element in the HTML.
+                document.getElementById("users-list").appendChild(li);
+            });
+            resolve(users);
+        }, // If there's an error, we reject the promise with the error.
+        reject);
     });
-};
+}
+// Logout button
+const logoutButton = document.getElementById("logout-button");
+logoutButton.addEventListener("click", (0, _authJsDefault.default).logoutUser);
 document.addEventListener("DOMContentLoaded", ()=>{
     const cells = document.querySelectorAll(".cell");
     const status = document.getElementById("status");
@@ -742,6 +776,6 @@ playNowButton.addEventListener("click", function() {
     alert("Sorry, that game is not available at the moment.");
 });
 
-},{"./firebaseConfig.js":"iGlw8","firebase/firestore":"8A4BC"}]},["7a07i","3qW8w"], "3qW8w", "parcelRequire8a3e")
+},{"./firebaseConfig.js":"iGlw8","firebase/firestore":"8A4BC","./auth.js":"90aDw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7a07i","3qW8w"], "3qW8w", "parcelRequire8a3e")
 
 //# sourceMappingURL=home.342c4ab4.js.map

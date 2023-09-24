@@ -85,9 +85,15 @@ h1 {
 }
 
 #online-users {
+  background-color: #343a40;
   border: 1px solid #ccc;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
   margin: 20px 0;
   padding: 20px;
+  display: flex;
 }
 
 #online-users h2 {
