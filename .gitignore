@@ -1,3 +1,8 @@
-static/js/firebaseConfig.js
-/venv
+js/firebaseConfig.js
+venv
 tttRules.txt
+myapp/joystick-junction-firebase-adminsdk-qly1n-8280e655cb.json
+
+node_modules
+.parcel-cache
+dist
