@@ -85,6 +85,12 @@ body {
 }
 
 #online-users {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #343a40;
   border: 1px solid #ccc;
   padding: 20px;
   margin: 20px 0;

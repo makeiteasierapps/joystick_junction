@@ -1,0 +1,19 @@
+var e="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{},t={},n={},o=e.parcelRequire8a3e;null==o&&((o=function(e){if(e in t)return t[e].exports;if(e in n){var o=n[e];delete n[e];var l={id:e,exports:{}};return t[e]=l,o.call(l.exports,l,l.exports),l.exports}var r=Error("Cannot find module '"+e+"'");throw r.code="MODULE_NOT_FOUND",r}).register=function(e,t){n[e]=t},e.parcelRequire8a3e=o);var l=o("6Uh31"),r=o("ilpIi"),a=o("kxgSl");window.onload=function(){(0,l.auth).onAuthStateChanged(async function(e){if(e){// User is signed in.
+let t=await e.getIdToken();try{let e=await fetch("http://localhost:5000/user",{method:"GET",headers:{"Content-Type":"application/json",Authorization:t}}),n=await e.json();if(n){let e=n.username;document.getElementById("user-greeting").textContent=`Hello, ${e}!`,await new Promise((e,t)=>{let n=(0,r.collection)(l.db,"users"),o=(0,r.query)(n);(0,r.onSnapshot)(o,t=>{let n=[];t.forEach(e=>{n.push(e.data())}),// Clear the previous list
+document.getElementById("users-list").innerHTML="",// Join the list and append it to the HTML element
+n.forEach(e=>{let t=document.createElement("li");if(t.textContent=e.username,e.online){let e=document.createElement("span");e.style.backgroundColor="green",e.style.borderRadius="50%",e.style.display="inline-block",e.style.width="10px",e.style.height="10px",e.style.marginLeft="5px",t.appendChild(e)}document.getElementById("users-list").appendChild(t)}),e(n)},t);// Reject the promise if there's an error
+})}else console.log("No such document!")}catch(e){console.error("Error:",e)}}else console.log("No user is signed in.")})};// Logout button
+const i=document.getElementById("logout-button");i.addEventListener("click",a.default.logoutUser),document.addEventListener("DOMContentLoaded",()=>{let e=document.querySelectorAll(".cell"),t=document.getElementById("status"),n=document.querySelector(".reset-button"),o="X";//Function to display the status of whose turn it is.
+function l(){t.textContent=`Player ${o}'s turn`}n.addEventListener("click",//Game reset-function
+function(){o="X",e.forEach(e=>{e.textContent="",e.classList.remove("X","O")}),l()}),e.forEach(t=>{t.addEventListener("click",t=>{// If the clicked cell is empty:
+""==t.target.textContent&&(// Place the current player's mark (X or O) in the cell.
+t.target.textContent=o,// Function to check if there's a winning combination on the board.
+function(){// Loop through each potential winning combination.
+for(let t of[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])// If all cells in a combination have the same non-empty value, return true (indicating a win).
+if(""!==e[t[0]].textContent&&//Checks if the first cell is not empty
+e[t[0]].textContent===e[t[1]].textContent&&// If the content of the first cell is the same as the content of the second cell in the current combination.
+e[t[1]].textContent===e[t[2]].textContent// checks if the content of the second cell is the same as the content of the third cell in our combination.
+)return!0;return!1;// If no winning combination found, return false.
+}()?setTimeout(()=>{alert(o+" won this round!"),location.reload()},100):[...e].every(e=>""!==e.textContent)?setTimeout(()=>{alert("It's a tie!"),location.reload()},100):(o="X"===o?"O":"X",l()))})}),l()});const s=document.getElementById("playNowButton");s.addEventListener("click",function(){let e=prompt("Which game would you like to play? (e.g. Tic Tac Toe)");e&&"tic tac toe"===e.toLowerCase()?alert("Rules for Tic Tac Toe:\n\nTwo players take turns marking a square. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game."):alert("Sorry, that game is not available at the moment.")});//# sourceMappingURL=home.e54078db.js.map
+
+//# sourceMappingURL=home.e54078db.js.map

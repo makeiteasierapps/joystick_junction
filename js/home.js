@@ -1,51 +1,89 @@
 import { db, auth } from './firebaseConfig.js';
-import {collection, getDocs, query, where} from 'firebase/firestore';
-console.log(db.app);
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import AuthService from './auth.js';
 
-window.onload = function () {
-    // const users = collection(db, 'users');
-    // console.log(users);
-    // db.collection('users')
-    //     .where('online', '==', true)
-    //     .onSnapshot((querySnapshot) => {
-    //         let users = [];
-    //         querySnapshot.forEach((doc) => {
-    //             users.push(doc.data());
-    //         });
-    //         console.log('Current online users: ', users.join(', '));
-    //     });
-    auth.onAuthStateChanged(async function (user) {
-        if (user) {
-            // User is signed in.
-            const idToken = await user.getIdToken();
+// This firebase method is triggered when the authentication state changes (i.e. when the user logs in or logs out).
+// it is always listening for changes in the authentication state.
+auth.onAuthStateChanged(async function (user) {
+    if (user) {
+        // User is signed in.
+        const idToken = await user.getIdToken();
+        try {
+            const response = await fetch('http://localhost:5000/user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: idToken,
+                },
+            });
 
-            try {
-                const response = await fetch('http://localhost:5000/user', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: idToken,
-                    },
-                });
-
-                const data = await response.json();
-                if (data) {
-                    const username = data.username;
-                    document.getElementById(
-                        'user-greeting'
-                    ).textContent = `Hello, ${username}!`;
-                } else {
-                    console.log('No such document!');
-                }
-            } catch (error) {
-                console.error('Error:', error);
+            const data = await response.json();
+            if (data) {
+                const username = data.username;
+                document.getElementById(
+                    'user-greeting'
+                ).textContent = `Hello, ${username}!`;
+                await getOnlineUsers();
+            } else {
+                console.log('No such document!');
             }
-        } else {
-            // No user is signed in.
-            console.log('No user is signed in.');
+        } catch (error) {
+            console.error('Error:', error);
         }
+    } else {
+        // No user is signed in.
+        
+    }
+});
+
+function getOnlineUsers() {
+    // We return a new Promise which will be resolved when the list of users is fetched.
+    return new Promise((resolve, reject) => {
+        // We get a reference to the 'users' collection in the Firestore database.
+        const usersCol = collection(db, 'users');
+        // We create a query to get all documents in the 'users' collection.
+        const q = query(usersCol);
+        // We use the onSnapshot method to listen for real-time updates to the query.
+        onSnapshot(
+            q,
+            (querySnapshot) => {
+                let users = [];
+                // We iterate over each document in the query snapshot.
+                querySnapshot.forEach((doc) => {
+                    users.push(doc.data());
+                });
+                // We clear the previous list of users in the HTML.
+                document.getElementById('users-list').innerHTML = '';
+                // We iterate over each user in the users array.
+                users.forEach((user) => {
+                    let li = document.createElement('li');
+                    li.textContent = user.username;
+                    // If the user is online, we add a green dot next to their name.
+                    if (user.online) {
+                        let span = document.createElement('span');
+                        span.style.backgroundColor = 'green';
+                        span.style.borderRadius = '50%';
+                        span.style.display = 'inline-block';
+                        span.style.width = '10px';
+                        span.style.height = '10px';
+                        span.style.marginLeft = '5px';
+                        // We append the green dot to the list item.
+                        li.appendChild(span);
+                    }
+                    // We append the list item to the 'users-list' element in the HTML.
+                    document.getElementById('users-list').appendChild(li);
+                });
+                resolve(users);
+            },
+            // If there's an error, we reject the promise with the error.
+            reject
+        );
     });
-};
+}
+
+// Logout button
+const logoutButton = document.getElementById('logout-button');
+logoutButton.addEventListener('click', AuthService.logoutUser);
 
 document.addEventListener('DOMContentLoaded', () => {
     const cells = document.querySelectorAll('.cell');

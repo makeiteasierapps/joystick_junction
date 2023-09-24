@@ -579,60 +579,71 @@ var _authJs = require("./auth.js");
 var _authJsDefault = parcelHelpers.interopDefault(_authJs);
 var _homeHtml = require("../home.html");
 var _homeHtmlDefault = parcelHelpers.interopDefault(_homeHtml);
-window.onload = function() {
-    // This event listener is triggered when the 'create-account' button is clicked.
-    // It changes the visible form to the 'create account' form.
-    document.getElementById("create-account").addEventListener("click", function(e) {
-        // Prevents the default action of the event.
-        e.preventDefault();
-        // Stops the propagation of the event to parent elements.
-        e.stopPropagation();
-        // Hides the 'login' form.
-        document.getElementById("login-form").style.display = "none";
-        // Displays the 'create account' form.
-        document.getElementById("create-account-form").style.display = "block";
-        // Hides the 'login' buttons.
-        document.getElementById("login-buttons").style.display = "none";
-    });
-    // This event listener is triggered when the 'back-to-login' button is clicked.
-    // It changes the visible form to the 'login' form.
-    document.getElementById("back-to-login").addEventListener("click", function(e) {
-        // Prevents the default action of the event.
-        e.preventDefault();
-        // Stops the propagation of the event to parent elements.
-        e.stopPropagation();
-        // Hides the 'create account' form.
-        document.getElementById("create-account-form").style.display = "none";
-        // Displays the 'login' form.
-        document.getElementById("login-form").style.display = "block";
-        // Displays the 'login' buttons.
-        document.getElementById("login-buttons").style.display = "block";
-    });
-    // This event listener is triggered when the 'create account' form is submitted.
-    // It calls the 'getFormSubmitHandler' method of the 'AuthService' class with the 'createUser' method as a parameter.
-    document.getElementById("create-account-form").addEventListener("submit", async function(e) {
-        // The 'getFormSubmitHandler' method returns a function that is immediately called with the event as a parameter.
-        // If the form submission is successful, the user is redirected to the '/home' page.
-        const success = await (0, _authJsDefault.default).getFormSubmitHandler((0, _authJsDefault.default).createUser, "create-account-form")(e);
-        if (success) window.location.href = (0, _homeHtmlDefault.default);
-    });
-    // This event listener is triggered when the 'login' form is submitted.
-    // It calls the 'getFormSubmitHandler' method of the 'AuthService' class with the 'loginUser' method as a parameter.
-    document.getElementById("login-form").addEventListener("submit", async function(e) {
-        // The 'getFormSubmitHandler' method returns a function that is immediately called with the event as a parameter.
-        // If the form submission is successful, the user is redirected to the '/home' page.
-        const success = await (0, _authJsDefault.default).getFormSubmitHandler((0, _authJsDefault.default).loginUser, "login-form")(e);
-        if (success) window.location.href = (0, _homeHtmlDefault.default);
-    });
-};
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+var _firebaseConfigJs = require("./firebaseConfig.js");
+var _firestore = require("firebase/firestore");
+// This event listener is triggered when the 'create-account' button is clicked.
+// It changes the visible form to the 'create account' form.
+document.getElementById("create-account").addEventListener("click", function(e) {
+    // Prevents the default action of the event.
+    e.preventDefault();
+    // Stops the propagation of the event to parent elements.
+    e.stopPropagation();
+    // Hides the 'login' form.
+    document.getElementById("login-form").style.display = "none";
+    // Displays the 'create account' form.
+    document.getElementById("create-account-form").style.display = "block";
+    // Hides the 'login' buttons.
+    document.getElementById("login-buttons").style.display = "none";
+});
+// This event listener is triggered when the 'back-to-login' button is clicked.
+// It changes the visible form to the 'login' form.
+document.getElementById("back-to-login").addEventListener("click", function(e) {
+    // Prevents the default action of the event.
+    e.preventDefault();
+    // Stops the propagation of the event to parent elements.
+    e.stopPropagation();
+    // Hides the 'create account' form.
+    document.getElementById("create-account-form").style.display = "none";
+    // Displays the 'login' form.
+    document.getElementById("login-form").style.display = "block";
+    // Displays the 'login' buttons.
+    document.getElementById("login-buttons").style.display = "block";
+});
+// This event listener is triggered when the 'create account' form is submitted.
+// It calls the 'getFormSubmitHandler' method of the 'AuthService' class with the 'createUser' method as a parameter.
+document.getElementById("create-account-form").addEventListener("submit", async function(e) {
+    // The 'getFormSubmitHandler' method returns a function that is immediately called with the event as a parameter.
+    // If the form submission is successful, the user is redirected to the '/home' page.
+    const success = await (0, _authJsDefault.default).getFormSubmitHandler((0, _authJsDefault.default).createUser, "create-account-form")(e);
+    if (success) window.location.href = (0, _homeHtmlDefault.default);
+});
+// This event listener is triggered when the 'login' form is submitted.
+// It calls the 'getFormSubmitHandler' method of the 'AuthService' class with the 'loginUser' method as a parameter.
+document.getElementById("login-form").addEventListener("submit", async function(e) {
+    // The 'getFormSubmitHandler' method returns a function that is immediately called with the event as a parameter.
+    // If the form submission is successful, the user is redirected to the '/home' page.
+    const response = await (0, _authJsDefault.default).getFormSubmitHandler((0, _authJsDefault.default).loginUser, "login-form")(e);
+    if (response.success) {
+        const uid = response.result.user.uid;
+        // Get a reference to the user document
+        const userRef = (0, _firestore.doc)((0, _firebaseConfigJs.db), "users", uid);
+        // Update the 'online' field of the user document
+        await (0, _firestore.updateDoc)(userRef, {
+            online: true
+        });
+        window.location.href = (0, _homeHtmlDefault.default);
+    }
+});
+// This code came from bootstrap's documentation. Grabs all forms that need validation
+// and adds a listener to the submit event. If the form is invalid, it prevents the submission
+// if the form is valid, it adds the 'was-validated' class to the form.
 (function() {
     "use strict";
     window.addEventListener("load", function() {
         // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var forms = document.getElementsByClassName("needs-validation");
+        let forms = document.getElementsByClassName("needs-validation");
         // Loop over them and prevent submission
-        var validation = Array.prototype.filter.call(forms, function(form) {
+        Array.prototype.filter.call(forms, function(form) {
             form.addEventListener("submit", function(event) {
                 if (form.checkValidity() === false) {
                     event.preventDefault();
@@ -644,110 +655,7 @@ window.onload = function() {
     }, false);
 })();
 
-},{"./auth.js":"90aDw","../home.html":"9eJsU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"90aDw":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _auth = require("firebase/auth");
-var _firestore = require("firebase/firestore");
-var _firebaseConfigJs = require("./firebaseConfig.js");
-class AuthService {
-    // This method is used to create a new user with the provided username, email, and password.
-    static async createUser(username, email, password) {
-        // We use Firebase's createUserWithEmailAndPassword method to create a new user.
-        const userCredential = await (0, _auth.createUserWithEmailAndPassword)((0, _firebaseConfigJs.auth), email, password);
-        // We then add the new user's username to Firestore (a NoSQL cloud database).
-        // We use the setDoc method to create a new document in the 'users' collection with the user's unique ID.
-        await (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebaseConfigJs.db), "users", userCredential.user.uid), {
-            username: username,
-            online: true
-        });
-        // If everything goes well, we return true.
-        return true;
-    }
-    // This method is used to log in an existing user with the provided email and password.
-    static async loginUser(email, password) {
-        // We use Firebase's signInWithEmailAndPassword method to log in the user.
-        const userCredential = await (0, _auth.signInWithEmailAndPassword)((0, _firebaseConfigJs.auth), email, password);
-        // Log the successful login of the user.
-        console.log("User logged in:", userCredential.user);
-        // Return the user's credentials.
-        return userCredential;
-    }
-    // This method is used to log out the currently logged in user.
-    static async logoutUser() {
-        // We use Firebase's signOut method to log out the user.
-        await (0, _firebaseConfigJs.auth).signOut();
-        // Log the successful logout of the user.
-        console.log("User logged out");
-    }
-    // This method is used to handle form submissions.
-    static getFormSubmitHandler(action, resetFormId) {
-        console.log("getFormSubmitHandler");
-        // We return an async function that takes an event as a parameter.
-        return async function(e) {
-            // We prevent the default form submission behavior.
-            e.preventDefault();
-            // We get the form that triggered the event and the values of the email and password fields.
-            let form = e.target;
-            let email = document.getElementById(form.id + "-email").value;
-            let password = document.getElementById(form.id + "-password").value;
-            let username;
-            // If the form is the create account form, we also get the value of the username field and check if the passwords match.
-            if (form.id === "create-account-form") {
-                username = document.getElementById("signup-username").value;
-                let confirmPassword = document.getElementById("confirm-password").value;
-                if (password !== confirmPassword) {
-                    console.log("Passwords do not match");
-                    return;
-                }
-            }
-            // We check if the form is valid.
-            if (!form.checkValidity()) return;
-            // We try to execute the action (either creating a new user or logging in an existing user).
-            try {
-                const success = form.id === "create-account-form" ? await action(username, email, password) : await action(email, password);
-                // If the action is successful, we return true.
-                if (success) return true;
-            } catch (error) {
-                // If there's an error, we log it and show a toast with the error message.
-                console.log("Error logging in:", error.code, error);
-                let toastBody = document.getElementById("toast-body");
-                toastBody.textContent = AuthService.parseAuthError(error.code);
-                let toast = document.querySelector(".toast");
-                let bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-                // We also reset the form.
-                document.getElementById(resetFormId).reset();
-                return false;
-            }
-            // If the action is not successful, we reset the form.
-            document.getElementById(form.id).reset();
-        };
-    }
-    // This method is used to parse Firebase authentication errors.
-    static parseAuthError(errorCode) {
-        // We use a switch statement to return a user-friendly error message based on the error code.
-        switch(errorCode){
-            case "auth/email-already-in-use":
-                return "This email is already in use.";
-            case "auth/invalid-email":
-                return "The email address is not valid.";
-            case "auth/invalid-login-credentials":
-                return "Invalid email or password. Please try again.";
-            case "auth/weak-password":
-                return "Password must be at least 6 characters.";
-            case "auth/user-not-found":
-                return "No user found with this email.";
-            case "auth/wrong-password":
-                return "Invalid password for the given email.";
-            default:
-                return "An unknown error occurred.";
-        }
-    }
-}
-exports.default = AuthService;
-
-},{"firebase/auth":"79vzg","firebase/firestore":"8A4BC","./firebaseConfig.js":"iGlw8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9eJsU":[function(require,module,exports) {
+},{"./auth.js":"90aDw","../home.html":"9eJsU","./firebaseConfig.js":"iGlw8","firebase/firestore":"8A4BC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9eJsU":[function(require,module,exports) {
 module.exports = require("491df06e0af7fbe").getBundleURL("iAo0i") + "home.c4ce006a.html" + "?" + Date.now();
 
 },{"491df06e0af7fbe":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -785,6 +693,6 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}]},["1dVMu","9jZEH"], "9jZEH", "parcelRequire8a3e")
+},{}]},["1dVMu"], null, "parcelRequire8a3e")
 
 //# sourceMappingURL=login.6d19b02f.js.map
