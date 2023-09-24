@@ -1,7 +1,15 @@
 body {
-    background-color: #f8f9fa;
+  background-image: url("../images/vecteezy_glossy-gaming-overlay-and-screen-border-decoration-elements_20919342.jpg");
+    /*background-size: cover;   */   
+   /*  background-attachment: fixed; */
     font-family: Arial, sans-serif;
     text-align: center;
+    background-repeat: no-repeat; 
+  }
+
+  .navbar {
+    position: sticky;
+    top: 0;
   }
 
   h1 {
@@ -9,12 +17,35 @@ body {
 }
   
 .hero {
-  background-image: url("../images/vecteezy_glossy-gaming-overlay-and-screen-border-decoration-elements_20919342.jpg");
-  background-size: cover;
-  height: 100vh;
+  
   color: #fff;
-  padding: 150px 0;
+  padding: 25px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: calc(100vh - 150px); 
 }
+
+
+.content {
+  background-color: rgba(36, 36, 36, 0.2); 
+  padding: 0px 0; /* Add padding as needed */
+  color: #fff;
+}
+
+.container {
+ /* background-color: rgba(0, 0, 0, 0.5); */
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
   
   .hero h1 {
     font-size: 3rem;
@@ -24,21 +55,31 @@ body {
     font-size: 1.5rem;
   }
   
+
   .game-board {
-    background-color: #63666a;
-    padding: 50px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; 
+    max-width: 400px; 
+    margin-top: 0px;
+}
+
+.user-info {
+  background-color: rgba(37,37,37,255);
+}
   
-  .footer {
-    background-color: #343a40;
-    color: #fff;
-    padding: 20px 0;
-  }
+.footer a {
+  display: inline-flex; /* or inline-flex */
+  margin-right: 10px; /* Adjust the spacing between icons as needed */
+}
   
    .tictactoeContainer {
+    
     max-width: 400px;
     margin: 0 auto;
     background-color: #fff;
@@ -83,3 +124,4 @@ body {
 .reset-button:hover {
   background-color: #0056b3;
 }
+

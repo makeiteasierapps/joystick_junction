@@ -16,6 +16,8 @@ window.onload = function () {
                     document.getElementById(
                         'user-greeting'
                     ).textContent = `Hello, ${username}!`;
+                     // Set the username in the "User Info" section
+                     document.getElementById('user-info-username').textContent = `Username: ${username}`;
                 } else {
                     console.log('No such document!');
                 }
@@ -61,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (checkWinner()) {
           setTimeout(() => {
             alert(currentPlayer + " won this round!");
+            updateStatistics('win'); // Call the function to update statistics for a win
             location.reload(); // Reload the game.
           }, 100);
         }
@@ -68,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (isTie()) {
           setTimeout(() => {
             alert("It's a tie!");
+            updateStatistics('tie'); // Call the function to update statistics for a tie
             location.reload(); // Reload the game.
           }, 100); // schedules a function to run after a delay ensuring that the last move is visually rendered on the screen before the alert pops up
         }
@@ -134,6 +138,12 @@ function updateStatistics(outcome) {
   } else if (outcome === "tie") {
     ties++;
   }
+
+   // Debugging: Log the updated values
+   console.log("Games Played:", gamesPlayed);
+   console.log("Wins:", wins);
+   console.log("Losses:", losses);
+   console.log("Ties:", ties);
 
   document.getElementById("games-played").textContent = gamesPlayed.toString();
   document.getElementById("wins").textContent = wins.toString();
