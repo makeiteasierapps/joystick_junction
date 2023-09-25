@@ -11,46 +11,48 @@
         <link rel="stylesheet" href="/css/home.css" />
     </head>
     <body>
-        <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Joystick Junction</a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <div class="background-container">
-            <!-- Hero Section -->
-            <div class="hero">
-                <div class="container text-center">
-                    <h1 id="user-greeting"></h1>
+        <div class="container-fluid h-100 d-flex flex-column">
+            <!-- Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">Joystick Junction</a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div class="content">
-                <div class="row">
+            </nav>
+
+            <div
+                class="background-container flex-grow-1 d-flex align-items-center"
+            >
+                <!-- Hero Section -->
+                <div class="hero">
+                    <div class="container text-center">
+                        <h1 id="user-greeting"></h1>
+                    </div>
+                </div>
+                <div class="content row">
                     <!-- Online Users Section -->
-                    <div class="col-md-4" id="online-users">
+                    <div class="col-md-3" id="online-users">
                         <h2>Online Users</h2>
                         <ul id="users-list">
                             <!-- Online users will be added here dynamically -->
@@ -59,7 +61,7 @@
                             Logout
                         </button>
                     </div>
-                    <div class="col-md-4 game-board">
+                    <div class="col-md-6 game-board">
                         <!-- Tic-Tac-Toe-->
                         <div class="tictactoeContainer">
                             <h1>Tic Tac Toe</h1>
@@ -119,7 +121,7 @@
                         </div>
                     </div>
                     <!-- User Info Container -->
-                    <div class="col-md-4 text-center" id="user-info">
+                    <div class="col-md- text-center" id="user-info">
                         <h2>User Info</h2>
                         <p id="user-info-username">Username: JohnDoe</p>
                         <p>Games Played: <span id="games-played">0</span></p>
@@ -131,7 +133,7 @@
             </div>
         </div>
         <!-- Footer Section -->
-        <footer class="footer text-center">
+        <footer class="footer bg-dark text-center">
             <p>&copy; 2023 Joystick Junction</p>
             <h5>Social</h5>
             <a href="http://instagram.com/"

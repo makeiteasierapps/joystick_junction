@@ -118,16 +118,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Check if the current move resulted in a win.
                 if (checkWinner()) {
                     setTimeout(() => {
-                        alert(currentPlayer + ' won this round!');
                         updateStatistics('win');
+                        alert(currentPlayer + ' won this round!');
                         location.reload(); // Reload the game.
                     }, 100);
                 }
                 // If not a win, check if the game is a tie.
                 else if (isTie()) {
                     setTimeout(() => {
-                        alert("It's a tie!");
                         updateStatistics('tie');
+                        alert("It's a tie!");
                         location.reload(); // Reload the game.
                     }, 100); // schedules a function to run after a delay ensuring that the last move is visually rendered on the screen before the alert pops up
                 }
@@ -179,12 +179,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStatus();
 });
 
+
 let gamesPlayed = 0;
 let wins = 0;
 let losses = 0;
 let ties = 0;
 
 function updateStatistics(outcome) {
+    console.log('Updating statistics...');
     gamesPlayed++;
     if (outcome === 'win') {
         wins++;
@@ -201,19 +203,19 @@ function updateStatistics(outcome) {
     document.getElementById('ties').textContent = ties.toString();
 }
 
-const playNowButton = document.getElementById('playNowButton');
-playNowButton.addEventListener('click', function () {
-    const selectedGame = prompt(
-        'Which game would you like to play? (e.g. Tic Tac Toe)'
-    );
+// const playNowButton = document.getElementById('playNowButton');
+// playNowButton.addEventListener('click', function () {
+//     const selectedGame = prompt(
+//         'Which game would you like to play? (e.g. Tic Tac Toe)'
+//     );
 
-    if (selectedGame && selectedGame.toLowerCase() === 'tic tac toe') {
-        // If the user chooses Tic Tac Toe, show the rules
-        alert(
-            'Rules for Tic Tac Toe:\n\nTwo players take turns marking a square. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.'
-        );
-    } else {
-        // Handle other game choices (if any)
-        alert('Sorry, that game is not available at the moment.');
-    }
-});
+//     if (selectedGame && selectedGame.toLowerCase() === 'tic tac toe') {
+//         // If the user chooses Tic Tac Toe, show the rules
+//         alert(
+//             'Rules for Tic Tac Toe:\n\nTwo players take turns marking a square. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.'
+//         );
+//     } else {
+//         // Handle other game choices (if any)
+//         alert('Sorry, that game is not available at the moment.');
+//     }
+// });

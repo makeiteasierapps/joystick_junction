@@ -6,19 +6,22 @@ html, body {
   text-align: center;
 }
 
-.background-container {
+.container-fluid {
   width: 100%;
-  height: 100%;
+  padding: 0;
+}
+
+.background-container {
   background-image: url("../images/vecteezy_glossy-gaming-overlay-and-screen-border-decoration-elements_20919342.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  
+  align-items: center;
 }
+
+
   .navbar {
     position: sticky;
     top: 0;
@@ -30,7 +33,6 @@ html, body {
   
 .hero {
   color: #fff;
-  padding: 15px 0;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -43,13 +45,10 @@ html, body {
 
 .content {
   width: 100%;
-  margin-left: 500px;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  background-color: rgba(36, 36, 36, 0.2); 
-  padding: 0px 0; /* Add padding as needed */
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
   
@@ -62,21 +61,10 @@ html, body {
   }
   
   .game-board {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    border-radius: 10px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%; 
-    max-width: 400px; 
-    margin-top: 0px;
-}
+    margin: 0 20px 30px 40px;
+    max-width: 100%;
+  }
 
-.user-info {
-  background-color: rgba(37,37,37,255);
-}
-  
 .footer a {
   display: inline-flex; /* or inline-flex */
   margin-right: 10px; /* Adjust the spacing between icons as needed */
@@ -130,20 +118,15 @@ html, body {
   background-color: #0056b3;
 }
 
-#online-users {
-  width: 100%;
-  max-width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #343a40;
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin: 20px 0;
+.footer{
+  color: #ee366b;
+  padding: 10px;
 }
 
-#online-users h2 {
-  color: #fff;
+#online-users {
+  max-width: 100px;
+  padding: 0;
+
 }
 
 #users-list {
@@ -158,4 +141,8 @@ html, body {
 
 #users-list li:last-child {
   border-bottom: none;
+}
+
+#user-info {
+  max-width: 133px;
 }
