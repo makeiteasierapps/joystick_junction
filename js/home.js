@@ -179,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStatus();
 });
 
-
 let gamesPlayed = 0;
 let wins = 0;
 let losses = 0;
