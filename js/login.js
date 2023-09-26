@@ -1,6 +1,6 @@
 import AuthService from './auth.js';
 import homePage from '../home.html';
-import { db } from './firebaseConfig.js';
+import { db } from '../firebaseConfig.js';
 import { doc, updateDoc } from 'firebase/firestore';
 
 // This event listener is triggered when the 'create-account' button is clicked.
