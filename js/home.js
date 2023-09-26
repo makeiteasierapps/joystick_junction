@@ -55,8 +55,9 @@ function getOnlineUsers() {
                 document.getElementById('users-list').innerHTML = '';
                 // We iterate over each user in the users array.
                 users.forEach((user) => {
-                    let li = document.createElement('li');
-                    li.textContent = user.username;
+                    let btn = document.createElement('button');
+                    btn.textContent = user.username;
+                    btn.className = 'btn btn-danger';
                     // If the user is online, we add a green dot next to their name.
                     if (user.online) {
                         let span = document.createElement('span');
@@ -67,10 +68,10 @@ function getOnlineUsers() {
                         span.style.height = '10px';
                         span.style.marginLeft = '5px';
                         // We append the green dot to the list item.
-                        li.appendChild(span);
+                        btn.appendChild(span);
                     }
                     // We append the list item to the 'users-list' element in the HTML.
-                    document.getElementById('users-list').appendChild(li);
+                    document.getElementById('users-list').appendChild(btn);
                 });
                 resolve(users);
             },
