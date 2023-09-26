@@ -3,7 +3,7 @@ import {
     signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db, auth } from './firebaseConfig.js';
+import { db, auth } from '../firebaseConfig.js';
 import loginPage from '../login.html';
 
 export default class AuthService {

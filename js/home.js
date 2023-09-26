@@ -1,4 +1,4 @@
-import { db, auth } from './firebaseConfig.js';
+import { db, auth } from '../firebaseConfig.js';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import AuthService from './auth.js';
 
