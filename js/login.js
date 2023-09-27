@@ -3,6 +3,8 @@ import homePage from '../home.html';
 import { db } from '../firebaseConfig.js';
 import { doc, updateDoc } from 'firebase/firestore';
 
+
+document.addEventListener('DOMContentLoaded', function () {
 // This event listener is triggered when the 'create-account' button is clicked.
 // It changes the visible form to the 'create account' form.
 document
@@ -101,3 +103,5 @@ document
         false
     );
 })();
+
+});
