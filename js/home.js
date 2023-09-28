@@ -1,6 +1,7 @@
 import { db, auth } from '../firebaseConfig.js';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { collection, query, onSnapshot, addDoc } from 'firebase/firestore';
 import AuthService from './auth.js';
+import { listenForInvites, sendInvite } from './handleInvite.js';
 
 // This firebase method is triggered when the authentication state changes (i.e. when the user logs in or logs out).
 // it is always listening for changes in the authentication state.
@@ -30,6 +31,8 @@ auth.onAuthStateChanged(async function (user) {
         } catch (error) {
             console.error('Error:', error);
         }
+        // This is where we start listening for invites to games.
+        listenForInvites(user.uid);
     } else {
         // No user is signed in.
     }
@@ -49,7 +52,9 @@ function getOnlineUsers() {
                 let users = [];
                 // We iterate over each document in the query snapshot.
                 querySnapshot.forEach((doc) => {
-                    users.push(doc.data());
+                    let user = doc.data();
+                    user.uid = doc.id;
+                    users.push(user);
                 });
                 // We clear the previous list of users in the HTML.
                 document.getElementById('users-list').innerHTML = '';
@@ -58,6 +63,8 @@ function getOnlineUsers() {
                     let btn = document.createElement('button');
                     btn.textContent = user.username;
                     btn.className = 'btn btn-danger';
+                    // console.log(user);
+                    btn.addEventListener('click', () => sendInvite(user.uid));
                     // If the user is online, we add a green dot next to their name.
                     if (user.online) {
                         let span = document.createElement('span');
@@ -202,20 +209,3 @@ function updateStatistics(outcome) {
     document.getElementById('losses').textContent = losses.toString();
     document.getElementById('ties').textContent = ties.toString();
 }
-
-// const playNowButton = document.getElementById('playNowButton');
-// playNowButton.addEventListener('click', function () {
-//     const selectedGame = prompt(
-//         'Which game would you like to play? (e.g. Tic Tac Toe)'
-//     );
-
-//     if (selectedGame && selectedGame.toLowerCase() === 'tic tac toe') {
-//         // If the user chooses Tic Tac Toe, show the rules
-//         alert(
-//             'Rules for Tic Tac Toe:\n\nTwo players take turns marking a square. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.'
-//         );
-//     } else {
-//         // Handle other game choices (if any)
-//         alert('Sorry, that game is not available at the moment.');
-//     }
-// });
