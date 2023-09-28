@@ -4,8 +4,7 @@
   "description": "Where dreams come true",
   "source": "login.html",
   "scripts": {
-    "start": "parcel --open",
-    "build": "parcel build"
+    "start": "parcel --open"
   },
   "keywords": [],
   "author": "",
