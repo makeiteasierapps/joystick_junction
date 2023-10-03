@@ -4,7 +4,6 @@ import {
     query,
     onSnapshot,
     doc,
-    updateDoc,
 } from 'firebase/firestore';
 import AuthService from './auth.js';
 import { listenForInvites, sendInvite } from './handleInvite.js';
@@ -27,12 +26,7 @@ async function handleUserSignedIn(user) {
         await getOnlineUsers();
     }
     listenForInvites(user.uid);
-    await waitForDOMContentLoaded();
-    const cells = document.querySelectorAll('.cell');
-    const gameId = sessionStorage.getItem('gameId');
-    const gameBoardDoc = getGameBoardDoc(gameId);
-    addEventListenersToCells(cells, gameBoardDoc);
-    listenForGameBoardChanges(gameBoardDoc, cells);
+
 }
 
 async function fetchUserData(idToken) {
@@ -55,104 +49,6 @@ function greetUser(username) {
     document.getElementById(
         'user-greeting'
     ).textContent = `Hello, ${username}!`;
-}
-
-function getGameBoardDoc(gameId) {
-    return doc(
-        db,
-        'users',
-        auth.currentUser.uid,
-        'games',
-        gameId,
-        'gameBoards',
-        'gameBoard'
-    );
-}
-
-function addEventListenersToCells(cells, gameBoardDoc) {
-    let currentPlayer = 'X';
-    cells.forEach((cell, index) => {
-        cell.addEventListener('click', async (e) => {
-            if (e.target.textContent == '') {
-                e.target.textContent = currentPlayer;
-                await updateDoc(gameBoardDoc, {
-                    [`cells.${index}`]: currentPlayer,
-                });
-                handleGameOutcome(cells, currentPlayer);
-                currentPlayer = switchPlayer(currentPlayer);
-            }
-        });
-    });
-}
-
-function handleGameOutcome(cells, currentPlayer) {
-    if (checkWinner(cells)) {
-        setTimeout(() => {
-            updateStatistics('win');
-            alert(currentPlayer + ' won this round!');
-            location.reload();
-        }, 100);
-    } else if (isTie(cells)) {
-        setTimeout(() => {
-            updateStatistics('tie');
-            alert("It's a tie!");
-            location.reload();
-        }, 100);
-    }
-}
-
-function switchPlayer(currentPlayer) {
-    return currentPlayer === 'X' ? 'O' : 'X';
-}
-
-function listenForGameBoardChanges(gameBoardDoc, cells) {
-    onSnapshot(gameBoardDoc, (docSnapshot) => {
-        const gameBoardData = docSnapshot.data();
-        console.log(gameBoardData);
-        const cellsData = gameBoardData.cells;
-        cells.forEach((cell, index) => {
-            cell.textContent = cellsData[index] || '';
-        });
-    });
-}
-
-function checkWinner(cells) {
-    const winCombination = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (const combination of winCombination) {
-        if (
-            cells[combination[0]].textContent !== '' &&
-            cells[combination[0]].textContent ===
-                cells[combination[1]].textContent &&
-            cells[combination[1]].textContent ===
-                cells[combination[2]].textContent
-        ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function isTie(cells) {
-    return [...cells].every((cell) => cell.textContent !== '');
-}
-
-function waitForDOMContentLoaded() {
-    return new Promise((resolve) => {
-        if (document.readyState !== 'loading') {
-            resolve();
-        } else {
-            document.addEventListener('DOMContentLoaded', resolve);
-        }
-    });
 }
 
 function getOnlineUsers() {
