@@ -1,18 +1,41 @@
 import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { auth } from '../firebaseConfig.js';
 
-export function handleGameOutcome(cells, currentPlayer) {
+export function handleGameOutcome(cells, currentPlayer, gameBoardDoc, gameDoc, players) {
     if (checkWinner(cells)) {
         setTimeout(() => {
             alert(currentPlayer + ' won this round!');
-            location.reload();
+            askToPlayAgain(gameBoardDoc, gameDoc, players);
         }, 100);
     } else if (isTie(cells)) {
         setTimeout(() => {
             alert("It's a tie!");
-            location.reload();
+            askToPlayAgain(gameBoardDoc, gameDoc, players);
         }, 100);
     }
+}
+
+function askToPlayAgain(gameBoardDoc, gameDoc, players) {
+    const playAgain = confirm('Do you want to play again?');
+    if (playAgain) {
+        location.reload();
+    } else {
+        alert('Thanks for playing! Come again');
+        resetGameBoard(gameBoardDoc);
+        resetGameData(gameDoc, players);
+    }
+}
+
+async function resetGameBoard(gameBoardDoc) {
+    // Reset the game board cells to an empty state (or your initial state)
+    await updateDoc(gameBoardDoc, { cells: Array(9).fill('') }); // Assuming a 3x3 board
+}
+
+async function resetGameData(gameDoc, players) {
+    // Reset other game data as required. 
+    // Here, I'm resetting the currentPlayer to the first player.
+    await updateDoc(gameDoc, { currentPlayer: players[0].uid });
+    // Add any other resets that are required based on your game's needs.
 }
 
 function getNextPlayer(currentPlayerUid, players) {
@@ -22,44 +45,36 @@ function getNextPlayer(currentPlayerUid, players) {
 }
 
 export async function addEventListenersToCells(cells, gameBoardDoc, gameDoc) {
-    const players = (await getDoc(gameDoc)).data().players; // Get the players array from the game data
+    const players = (await getDoc(gameDoc)).data().players;
 
     cells.forEach((cell, index) => {
         cell.addEventListener('click', async (e) => {
-            // Fetch the current state of the game
             let gameDocSnapshot = await getDoc(gameDoc);
             let gameData = gameDocSnapshot.data();
             let currentPlayer = gameData.players.find(
                 (player) => player.uid === gameData.currentPlayer
             );
 
-            // Check if the current user is the current player
-            // so that they cannot click on the board if it is not their turn
             const currentUserUid = auth.currentUser
                 ? auth.currentUser.uid
                 : null;
             if (currentPlayer.uid !== currentUserUid) {
-                return; // If not, exit the function immediately 
+                return; 
             }
 
             if (e.target.textContent == '') {
                 e.target.textContent = currentPlayer.symbol;
 
-                // Fetch the current state of the game board
                 let gameBoardDocSnapshot = await getDoc(gameBoardDoc);
                 const gameBoardData = gameBoardDocSnapshot.data();
 
-                // Update the specific cell in the array
                 gameBoardData.cells[index] = currentPlayer.symbol;
-
-                // Write the whole array back to Firestore
                 await updateDoc(gameBoardDoc, { cells: gameBoardData.cells });
 
-                // Switch turns
                 const nextPlayer = getNextPlayer(currentPlayer.uid, players);
                 await updateDoc(gameDoc, { currentPlayer: nextPlayer });
 
-                handleGameOutcome(cells, currentPlayer.symbol);
+                handleGameOutcome(cells, currentPlayer.symbol, gameBoardDoc, gameDoc, players);
             }
         });
     });
